@@ -4,7 +4,7 @@
 export const TITLE = 'Privilege Google Secrets Lab';
 export const INTRO = 'An AI agent needs a Google Secret Manager credential. It does not get one: it holds only a Privilege agent access key, and asks the Hubs gateway over MCP for the secret. The gateway\'s policy decides — an in-scope secret is released by the Hubs custodian, an out-of-scope ask is refused with Gateway Policy Denied. This lab simulates the whole broker chain in-process.';
 export const BANNER = 'SIMULATION: mock Privilege Hubs gateway, mock custodian and mock Google Secret Manager, all in-process — no tenant, no outbound network. The one released secret is MOCK-issued and labelled (rule 4 exception, shown so the flow is legible). For education.';
-export const REAL_BANNER = 'REAL MODE: this lab contacts no live system in real mode — the Hubs gateway, custodian and Google Secret Manager it points at are not contacted. Real mode here only enables the settings form against this lab\'s own loopback state. Everything on the page is still a simulation.';
+export const REAL_BANNER = 'REAL MODE: the hub-state section shows the owner\'s actual Privilege Secrets Hub tenant state (a redacted console-API export snapshot). The MCP broker cards below stay a simulation in both modes — no live Hubs gateway, custodian or Google Secret Manager is contacted.';
 
 export const PRODUCTS = [
   { id: 'agent-key', name: 'Agent access key', blurb: 'The only credential the agent holds' },

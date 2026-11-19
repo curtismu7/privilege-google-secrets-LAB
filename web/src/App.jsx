@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import TopMenu from "./top-menu/TopMenu.jsx";
 import Banner from "./components/Banner.jsx";
+import HubState from "./components/HubState.jsx";
 import GatewayCards from "./components/GatewayCards.jsx";
 import WhyBetter from "./components/WhyBetter.jsx";
 import DiagramTab from "./components/DiagramTab.jsx";
@@ -104,7 +105,12 @@ export default function App() {
       <main className="page">
         <Banner story={story} mode={info?.mode} />
         <p className="keys">Workspace {workspaceId()} · everything simulated · no tenant, no outbound network</p>
-        {tab === "gateway" && <section data-testid="tab-gateway"><GatewayCards resetSignal={resetSignal} /></section>}
+        {tab === "gateway" && (
+          <section data-testid="tab-gateway">
+            <HubState source={info?.source} />
+            <GatewayCards resetSignal={resetSignal} />
+          </section>
+        )}
         {tab === "why" && <section data-testid="tab-why"><WhyBetter why={why} /></section>}
         {tab === "diagram" && <DiagramTab vertical="retail" resetSignal={resetSignal} />}
         {tab === "facts" && (
