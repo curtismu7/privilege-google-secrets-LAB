@@ -70,7 +70,7 @@ export async function runChecks({ env = process.env, cast = DEFAULT_CAST } = {})
   const ng = await netguardSelfTest();
   add('netguard', ng.ok ? 'pass' : 'fail', ng.ok ? `blocked fetch, socket, socket-by-IP, dns lookup, dns resolve and udp to a non-loopback host (${ng.blocked}/6)` : ng.detail);
 
-  add('tenant', 'pass', 'mock needs no tenant or credentials and makes no outbound network call; this lab has no live mode');
+  add('tenant', 'pass', 'mock needs no tenant or credentials and makes no outbound network call; real mode shows the console-API snapshot, not a live call');
   return checks;
 }
 

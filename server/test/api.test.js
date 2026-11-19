@@ -23,7 +23,8 @@ test('GET /api/info: mock by default, simulated always true, real disabled with 
     assert.equal(j.source, 'mock');
     assert.equal(j.simulated, true);
     assert.equal(j.realAvailable, false);
-    assert.match(j.realHint, /no live mode/);
+    assert.match(j.realHint, /GCP-hub-secrets/);
+    assert.match(j.realHint, /2026-11-17/);
     assert.equal(j.gatewayUrl, GATEWAY_URL);
     assert.equal(j.agent.id, AGENT.id);
   });
@@ -35,7 +36,7 @@ test('POST /api/mode: exact body only, 409 with the reason when real is not enab
     assert.equal(bad.status, 400);
     const real = await post(url, '/api/mode', { source: 'real' });
     assert.equal(real.status, 409);
-    assert.match((await real.json()).detail, /no live mode/);
+    assert.match((await real.json()).detail, /GCP-hub-secrets/);
     const ok = await post(url, '/api/mode', { source: 'mock' });
     assert.equal(ok.status, 200);
   });
@@ -48,6 +49,31 @@ test('POST /api/mode: exact body only, 409 with the reason when real is not enab
     const back = await post(url, '/api/mode', { source: 'mock' });
     assert.equal((await back.json()).source, 'mock');
   }, { env: { PGS_MODE_REAL: '1' } });
+});
+
+test('GET /api/hub-state: same snapshot shape in both modes with source naming the mode; workspace-scoped and no-store', async () => {
+  await withServer(async (url) => {
+    const noWs = await fetch(`${url}/api/hub-state`, { headers: { 'x-workspace': 'not a workspace' } });
+    assert.equal(noWs.status, 400);
+    const mock = await (await fetch(`${url}/api/hub-state`, { headers: { 'x-workspace': 'default' } })).json();
+    assert.equal(mock.source, 'mock');
+    assert.equal(mock.snapshotDate, '2026-11-17');
+    assert.equal(mock.snapshot.hub.name, 'GCP-hub-secrets');
+    assert.equal(mock.snapshot.secrets.length, 2);
+    assert.equal(mock.snapshot.grant.name, 'YukonRiver-416146713043');
+    assert.equal(mock.snapshot.grant.timeBoxed, false);
+  });
+  await withServer(async (url) => {
+    await post(url, '/api/mode', { source: 'real' });
+    const j = await (await fetch(`${url}/api/hub-state`)).json();
+    assert.equal(j.source, 'real');
+    assert.equal(j.snapshot.hub.projectId, 'privilege-hub-test-643070');
+    assert.deepEqual(j.snapshot.secrets.map((s) => s.id), ['groq-key', 'privilege-hub-test']);
+  }, { env: { PGS_MODE_REAL: '1' } });
+  await withServer(async (url) => {
+    const r = await fetch(`${url}/api/hub-state`);
+    assert.match(r.headers.get('cache-control'), /no-store/);
+  });
 });
 
 test('GET /api/catalog: the agent, its MOCK-labelled key, the two tools and the known secrets', async () => {

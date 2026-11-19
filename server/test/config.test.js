@@ -12,9 +12,12 @@ test('MODE defaults to Mock (this lab has no live mode); only mock/real accepted
   for (const MODE of ['live', 'prod', 'Mock', 'x']) assert.throws(() => modeFrom({ PGS_MODE_REAL: '1', MODE }), /not available/, MODE);
 });
 
-test('realAvailable reflects only the opt-in; the problem text is honest about no live mode', () => {
+test('realAvailable reflects only the opt-in; the hint names the real tenant contents and the snapshot', () => {
   assert.equal(realAvailableFrom({}), false);
   assert.equal(realAvailableFrom({ PGS_MODE_REAL: '1' }), true);
-  assert.match(realProblemFrom({}), /no live mode/);
   assert.match(realProblemFrom({}), /PGS_MODE_REAL/);
+  assert.match(realProblemFrom({}), /GCP-hub-secrets/);
+  assert.match(realProblemFrom({}), /privilege-hub-test-643070/);
+  assert.match(realProblemFrom({}), /2026-11-17/);
+  assert.match(realProblemFrom({}), /simulation in both modes/);
 });

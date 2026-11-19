@@ -15,6 +15,7 @@ import { buildStory, TITLE } from './story.js';
 import { DIAGRAM_NAMES, buildDiagram } from './diagramData.js';
 import { AGENT, GATEWAY_URL, TOOLS, WHY_BETTER, STATIC_KEY_RISK, toolsList, getGoogleSecret, getBillingSecret, gatewaySelfTest } from './hubs.js';
 import { createWorkspaces, workspaceFrom } from './workspaces.js';
+import { loadHubSnapshot } from './hubSnapshot.js';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const WEB_DIST = process.env.WEB_DIST || path.resolve(HERE, '../../web/dist');
@@ -80,6 +81,14 @@ export function createApp({
     gatewayUrl: GATEWAY_URL, agent: { id: AGENT.id, label: AGENT.label, accessKey: AGENT.accessKey, keyLabel: 'MOCK agent access key (mock-issued, rule 4 exception — never a real credential)' },
     tools: TOOLS, knownSecrets: SECRETS_KNOWN, workspace: ws,
   })));
+
+  // The owner's real Privilege Secrets Hub tenant state (a redacted console-API export snapshot).
+  // Always serves the same shape with `source` = the current mode; the UI shows the hub-state section
+  // only when source === 'real', and a one-line switch hint in mock. Workspace-scoped like /catalog.
+  api.get('/hub-state', withWorkspace((ws, _req, res) => {
+    const snapshot = loadHubSnapshot();
+    return res.json({ source: mode, snapshot, snapshotDate: snapshot.snapshotDate });
+  }));
 
   // The rule-23 shape helper: any gateway call's downstream failure (cannot happen in the mock, but the
   // mapping is tested so a real hop dropped in later answers JSON, never an HTML page or a hang).
