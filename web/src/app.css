@@ -130,3 +130,19 @@ button[aria-pressed="true"]:hover:not(:disabled) { background: var(--accent-deep
 .search-group > h2 { font-size: var(--font-size-lg); margin: 0 0 4px; }
 .search code[data-testid="kql"] { overflow-wrap: anywhere; white-space: pre-wrap; }
 .search input[type="text"] { min-width: 0; flex: 1 1 12ch; }
+
+/* Sectioned layout: group the cards into numbered, explained sections. */
+.pgs-section { margin: 0 0 22px; }
+.pgs-section h2 {
+  margin: 0 0 6px;
+  font-size: var(--font-size-lg);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--th-border);
+}
+.pgs-section-lead {
+  margin: 0 0 12px;
+  max-width: 75ch;
+  color: var(--th-text-muted);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}

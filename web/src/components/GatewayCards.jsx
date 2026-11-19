@@ -64,53 +64,77 @@ export default function GatewayCards({ resetSignal }) {
 
   return (
     <div data-testid="gateway-cards">
-      <div className="card" data-testid="agent-card">
-        <h3>The agent</h3>
-        <p>
-          <strong>{catalog.agent.label}</strong> (<code>{catalog.agent.id}</code>) holds exactly one credential:{" "}
-          <code data-testid="agent-key">{catalog.agent.accessKey}</code>
+      <section className="pgs-section" aria-labelledby="pgs-h-cast">
+        <h2 id="pgs-h-cast">1 · Who is in the story</h2>
+        <p className="pgs-section-lead">
+          Three actors. The <strong>agent</strong> is an AI program that needs a Google credential to do its job.
+          <strong> Privilege Hubs</strong> is the broker in the middle: it knows which agents exist and what each one is allowed to have.
+          The <strong>custodian</strong> holds the actual Google Secret Manager credentials — the agent never sees them until Hubs releases one.
         </p>
-        <p className="small muted">{catalog.agent.keyLabel}</p>
-        <label className="check">
-          <input type="checkbox" checked={useWrongKey} onChange={(e) => setUseWrongKey(e.target.checked)} data-testid="wrong-key" />
-          Present a wrong key instead (the 401 control)
-        </label>
-      </div>
+        <div className="card" data-testid="agent-card">
+          <h3>The agent</h3>
+          <p>
+            <strong>{catalog.agent.label}</strong> (<code>{catalog.agent.id}</code>) holds exactly one credential:{" "}
+            <code data-testid="agent-key">{catalog.agent.accessKey}</code>
+          </p>
+          <p className="small muted">{catalog.agent.keyLabel}</p>
+          <label className="check">
+            <input type="checkbox" checked={useWrongKey} onChange={(e) => setUseWrongKey(e.target.checked)} data-testid="wrong-key" />
+            Present a wrong key instead (the 401 control)
+          </label>
+        </div>
+      </section>
 
-      <div className="card">
-        <h3>Card 1 — get_google_secret (in scope)</h3>
-        <p className="small muted">MCP tools/call against <code>{catalog.gatewayUrl}</code>. The default secret is on the agent key's grant: policy passes, the custodian releases it.</p>
-        <label>Secret name
-          <input value={secret} onChange={(e) => setSecret(e.target.value)} data-testid="secret-input" maxLength={120} list="known-secrets" />
-        </label>
-        <datalist id="known-secrets">{catalog.knownSecrets.map((s) => <option key={s} value={s} />)}</datalist>
-        <p className="actions">
-          <button type="button" disabled={busy} data-testid="call-in-scope" onClick={() => call("/api/gateway/get-google-secret", { secret, key }, "Gateway check: tools/call get_google_secret")}>Call gateway</button>
+      <section className="pgs-section" aria-labelledby="pgs-h-try">
+        <h2 id="pgs-h-try">2 · Try it — same agent, two secrets, one policy</h2>
+        <p className="pgs-section-lead">
+          Each button sends a real MCP <code>tools/call</code> to the Hubs gateway. Watch the trace at the bottom:
+          the gateway checks the agent key, then the secret policy, then releases or refuses.
+          Card 1 is on the agent's grant — policy passes and the custodian releases the secret.
+          Card 2 is not on the grant — the gateway refuses it, and that refusal is the point.
         </p>
-      </div>
+        <div className="card">
+          <h3>Card 1 — get_google_secret (in scope)</h3>
+          <p className="small muted">MCP tools/call against <code>{catalog.gatewayUrl}</code>. The default secret is on the agent key's grant: policy passes, the custodian releases it.</p>
+          <label>Secret name
+            <input value={secret} onChange={(e) => setSecret(e.target.value)} data-testid="secret-input" maxLength={120} list="known-secrets" />
+          </label>
+          <datalist id="known-secrets">{catalog.knownSecrets.map((s) => <option key={s} value={s} />)}</datalist>
+          <p className="actions">
+            <button type="button" disabled={busy} data-testid="call-in-scope" onClick={() => call("/api/gateway/get-google-secret", { secret, key }, "Gateway check: tools/call get_google_secret")}>Call gateway</button>
+          </p>
+        </div>
 
-      <div className="card">
-        <h3>Card 2 — get_google_billing_secret (out of scope)</h3>
-        <p className="small muted">The same key asks for the billing secret. Policy refuses: <strong>the refusal is the product</strong>. Read the policy reason in the trace.</p>
-        <p className="actions">
-          <button type="button" disabled={busy} data-testid="call-out-of-scope" onClick={() => call("/api/gateway/get-billing-secret", { key }, "Gateway check: tools/call get_google_billing_secret (refused)")}>Call gateway (expect DENY)</button>
-        </p>
-      </div>
+        <div className="card">
+          <h3>Card 2 — get_google_billing_secret (out of scope)</h3>
+          <p className="small muted">The same key asks for the billing secret. Policy refuses: <strong>the refusal is the product</strong>. Read the policy reason in the trace.</p>
+          <p className="actions">
+            <button type="button" disabled={busy} data-testid="call-out-of-scope" onClick={() => call("/api/gateway/get-billing-secret", { key }, "Gateway check: tools/call get_google_billing_secret (refused)")}>Call gateway (expect DENY)</button>
+          </p>
+        </div>
 
-      <div className="card">
-        <h3>tools/list (the grant, as the gateway reports it)</h3>
-        <p className="small muted">What this key's grant exposes on this door — the two secret tools. No Google credential is involved at any point.</p>
-        <p className="actions">
-          <button type="button" disabled={busy} data-testid="call-tools-list" onClick={() => call("/api/gateway/tools-list", { key }, "Gateway check: tools/list")}>Call tools/list</button>
-        </p>
-      </div>
+        <div className="card">
+          <h3>tools/list (the grant, as the gateway reports it)</h3>
+          <p className="small muted">What this key's grant exposes on this door — the two secret tools. No Google credential is involved at any point.</p>
+          <p className="actions">
+            <button type="button" disabled={busy} data-testid="call-tools-list" onClick={() => call("/api/gateway/tools-list", { key }, "Gateway check: tools/list")}>Call tools/list</button>
+          </p>
+        </div>
+      </section>
 
       {released && (
-        <div className="card" data-testid="released">
-          <h3>Released secret (MOCK, rule 4 exception)</h3>
-          <p className="small muted">The custodian released this into the agent session. It is <strong>MOCK-issued and labelled</strong> — shown so the flow is legible, never a real credential.</p>
-          <Json value={released} label="Released secret" testId="released-secret" hot={["name", "payload", "mock"]} />
-        </div>
+        <section className="pgs-section" aria-labelledby="pgs-h-released">
+          <h2 id="pgs-h-released">3 · What the agent received</h2>
+          <p className="pgs-section-lead">
+            The custodian released this into the agent session after the policy passed.
+            It is <strong>MOCK-issued and labelled</strong> — shown so the flow is legible, never a real credential.
+            In a real deployment the agent would use it for Google API calls without ever having seen a service-account key file.
+          </p>
+          <div className="card" data-testid="released">
+            <h3>Released secret (MOCK, rule 4 exception)</h3>
+            <Json value={released} label="Released secret" testId="released-secret" hot={["name", "payload", "mock"]} />
+          </div>
+        </section>
       )}
 
       {error && <p className="error" data-testid="gateway-error" role="alert">{error}</p>}

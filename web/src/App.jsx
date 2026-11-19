@@ -25,11 +25,18 @@ export default function App() {
   const [present, setPresent] = useState(false);
   const [talkOpen, setTalkOpen] = useState(false);
   const [theme, setTheme] = useState(() => (localStorage.getItem("theme") || "auto"));
+  const [fontSize, setFontSize] = useState(() => (localStorage.getItem("fontSize") || "M"));
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme === "auto" ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : theme;
     localStorage.setItem("theme", theme);
   }, [theme]);
+
+  // TopMenu's S/M/L + A-/A+ steppers map to root font sizes; persisted like the theme.
+  useEffect(() => {
+    document.documentElement.style.setProperty("--fs", { S: "14px", M: "16px", L: "18px" }[fontSize] ?? "16px");
+    localStorage.setItem("fontSize", fontSize);
+  }, [fontSize]);
 
   const loadAll = useCallback(async () => {
     try {
@@ -85,6 +92,7 @@ export default function App() {
         <TopMenu
           mode={{ value: info?.mode ?? "mock", onChange: setMode, realAvailable: info?.realAvailable, realHint: info?.realHint }}
           theme={{ value: theme, onChange: setTheme }}
+          fontSize={{ value: fontSize, onChange: setFontSize }}
           present={{ active: present, onToggle: () => setPresent((p) => !p) }}
           talkTrack={{ active: talkOpen, onToggle: () => setTalkOpen((t) => !t) }}
           onReset={reset}
