@@ -33,7 +33,7 @@ export default function GatewayCards({ resetSignal }) {
       const { ok, status, body } = await postJson(path, payload);
       if (!ok) { setError(body.detail || body.message || body.error || `HTTP ${status}`); return; }
       setStep((n) => n + 1);
-      setExchanges((xs) => [...xs, { step: xs.length + 1, title, status: body.status, trace: body.trace }]);
+      setExchanges((xs) => [...xs, { step: xs.length + 1, title, status: body.status, trace: simplifyTrace(body.trace) }]);
       if (path !== "/api/gateway/tools-list") {
         const denied = body.trace.decisions.some((d) => d.id === "policy" && d.outcome === "fail");
         setReleased(denied ? null : parseReleased(body));
@@ -49,6 +49,17 @@ export default function GatewayCards({ resetSignal }) {
     const text = body?.body?.result?.content?.[0]?.text;
     if (!text) return null;
     try { return JSON.parse(text); } catch { return { raw: text }; }
+  };
+
+  // The MCP envelope (jsonrpc/id/headers) is noise for this story: the trace's response pane shows
+  // just what the tools/call answered — result.content[0] (type + text) on success, error.message on refusal.
+  const simplifyTrace = (trace) => {
+    if (!trace?.response) return trace;
+    const body = trace.response.body;
+    const simple = body?.error
+      ? { error: body.error.message ?? body.error }
+      : { content: (body?.result?.content ?? []).map((c) => ({ type: c?.type, text: c?.text })) };
+    return { ...trace, response: { ...trace.response, body: simple } };
   };
 
   return (
@@ -104,7 +115,7 @@ export default function GatewayCards({ resetSignal }) {
 
       {error && <p className="error" data-testid="gateway-error" role="alert">{error}</p>}
 
-      <GatewayTrace exchanges={exchanges} source="mock" basisNote="Simulated: this lab's in-process gateway runs the checks in the same order, so these decisions are what it computed (checked). A real Privilege gateway reports no per-check detail — its trace may only say observed or inferred." />
+      <GatewayTrace exchanges={exchanges} source="mock" hot={[]} basisNote="Simulated: this lab's in-process gateway runs the checks in the same order, so these decisions are what it computed (checked). A real Privilege gateway reports no per-check detail — its trace may only say observed or inferred." />
     </div>
   );
 }
