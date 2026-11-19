@@ -1,0 +1,28 @@
+name: privilege-google-secrets
+
+services:
+  privilege-google-secrets:
+    restart: unless-stopped
+    build: .
+    ports:
+      - "127.0.0.1:${HOST_PORT:-7826}:7826"
+    environment:
+      PORT: "7826"
+      # The container must listen on all interfaces; the publish above is loopback only.
+      PGS_BIND: 0.0.0.0
+      SHELF_URL: ${SHELF_URL:-http://127.0.0.1:4400}
+      LAB_ALLOWED_HOSTS: ${LAB_ALLOWED_HOSTS:-privilege-google-secrets.local.ping-devops.com}
+      # Start mode. Mock is the default and the only fully-offline mode. PGS_MODE_REAL=1 (owner's .env)
+      # enables the rule-19 Real switch; this lab contacts no live system in either mode.
+      MODE: ${PGS_MODE:-}
+      PGS_MODE_REAL: ${PGS_MODE_REAL:-}
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:7826/api/health').then(r=>r.json()).then(j=>process.exit(j.schema==='demo-health/1'&&j.state==='ready'?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      start_period: 5s
+      start_interval: 2s
+      timeout: 5s
+      retries: 3

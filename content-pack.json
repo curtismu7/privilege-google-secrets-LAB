@@ -1,0 +1,207 @@
+{
+  "schema": "demo-content-pack/1",
+  "id": "privilege-google-secrets",
+  "title": "Privilege Google Secrets Lab",
+  "version": "0.1.0",
+  "demo": {
+    "id": "privilege-google-secrets",
+    "name": "Privilege Google Secrets Lab",
+    "catalog": "D0",
+    "baseUrl": "http://localhost:7826",
+    "doctor": "/api/health",
+    "tags": [
+      "pingone-privilege",
+      "ai-agent-security",
+      "agent-identity",
+      "secrets",
+      "mock-only"
+    ]
+  },
+  "glossary": [
+    {
+      "id": "agent-key",
+      "term": "Agent access key",
+      "definition": "The one credential an AI agent holds in the Privilege model: it identifies the agent to the Hubs gateway and carries its per-secret grant. It is not a Google credential and opens nothing by itself.",
+      "aliases": [
+        "agent access key"
+      ]
+    },
+    {
+      "id": "secret-policy",
+      "term": "Secret policy",
+      "definition": "The Hubs gateway policy that decides, per secret, whether the presenting agent's key may read it. An out-of-scope ask is refused with Gateway Policy Denied — the refusal is the product.",
+      "aliases": [
+        "policy"
+      ]
+    },
+    {
+      "id": "custodian",
+      "term": "Custodian",
+      "definition": "The Hubs component that holds the secret and releases it into the agent session only on an ALLOW. A refused call never reaches it.",
+      "aliases": []
+    },
+    {
+      "id": "static-key",
+      "term": "Static key",
+      "definition": "The counterfactual: a Google credential pasted into the agent's config. It sits on the agent host, reads every secret it can name, and is audited per credential rather than per agent.",
+      "aliases": []
+    }
+  ],
+  "sources": [
+    {
+      "id": "family-gateway",
+      "title": "The family's measured Privilege MCP gateway wire (shared/gateway-real, privilege-demo, privilege-map)",
+      "url": "https://gateway.privilege.example",
+      "kind": "measured-elsewhere",
+      "use": "The MCP tools/list + tools/call wire and the agent-key concept this lab simulates; measured live by other labs in 2026-11, re-simulated here in-process.",
+      "status": "read",
+      "checked": "2026-11-19"
+    },
+    {
+      "id": "google-secret-manager",
+      "title": "Google Secret Manager resource naming",
+      "url": "https://cloud.google.com/secret-manager",
+      "kind": "standard",
+      "use": "The secret resource-name shape (projects/*/secrets/*) in the mock store. No Google API is called.",
+      "status": "not-read",
+      "checked": "2026-11-19"
+    }
+  ],
+  "cards": [
+    {
+      "id": "try-allow-in-scope",
+      "label": "Scenario 1: An in-scope secret is released",
+      "description": "The agent presents its key and asks for projects/demo/secrets/google-agent-credential. Policy: the secret is on the key's grant. Custodian: releases version 3 into the session. The payload is MOCK-issued and labelled.",
+      "group": "try-it",
+      "action": {
+        "type": "route",
+        "href": "/#gateway"
+      },
+      "terms": [
+        "agent-key",
+        "custodian"
+      ],
+      "story": "S01"
+    },
+    {
+      "id": "try-deny-out-of-scope",
+      "label": "Scenario 2: An out-of-scope secret is refused — the refusal is the product",
+      "description": "The same key asks for the billing secret. Policy: not on the grant list. Gateway Policy Denied, custodian never reached, and the refusal is recorded with the agent's identity.",
+      "group": "try-it",
+      "action": {
+        "type": "route",
+        "href": "/#gateway"
+      },
+      "terms": [
+        "secret-policy"
+      ],
+      "story": "S02"
+    },
+    {
+      "id": "try-deny-unknown-secret",
+      "label": "Scenario 3: An unknown secret is refused too",
+      "description": "A secret that does not exist in the mock store is refused as \"no such secret\" — and the refusal shape is the same as the out-of-scope one: the agent learns nothing about what does exist.",
+      "group": "try-it",
+      "action": {
+        "type": "route",
+        "href": "/#gateway"
+      },
+      "terms": [
+        "secret-policy"
+      ],
+      "story": "S03"
+    },
+    {
+      "id": "try-deny-bad-key",
+      "label": "Scenario 4: A wrong key gets nothing at all",
+      "description": "Present a key that is not the registered agent key and the gateway refuses at the identity step: 401, policy not reached, no information about the policy beyond the fact of the refusal.",
+      "group": "try-it",
+      "action": {
+        "type": "route",
+        "href": "/#gateway"
+      },
+      "terms": [
+        "agent-key"
+      ],
+      "story": "S04"
+    },
+    {
+      "id": "try-static-key-contrast",
+      "label": "Scenario 5: Why this beats a static key",
+      "description": "Three lines: no secret in the agent (nothing to steal from the agent host), policy per secret (the same key cannot read everything it can name), and an audit trail keyed to the agent rather than to a shared credential.",
+      "group": "try-it",
+      "action": {
+        "type": "route",
+        "href": "/#why"
+      },
+      "terms": [
+        "static-key"
+      ],
+      "story": "S05"
+    },
+    {
+      "id": "concept-gateway",
+      "label": "Call the gateway",
+      "description": "tools/call with the agent key: trace, decisions, release or refusal.",
+      "group": "concept",
+      "action": {
+        "type": "route",
+        "href": "/#gateway"
+      },
+      "terms": [
+        "agent-key",
+        "secret-policy"
+      ]
+    },
+    {
+      "id": "concept-why",
+      "label": "Why not a static key",
+      "description": "The three lines the broker beats the pasted credential on.",
+      "group": "concept",
+      "action": {
+        "type": "route",
+        "href": "/#why"
+      },
+      "terms": [
+        "static-key"
+      ]
+    },
+    {
+      "id": "ref-doctor",
+      "label": "Doctor and health",
+      "description": "Preflight checks and the demo-health/1 endpoint.",
+      "group": "setup",
+      "action": {
+        "type": "route",
+        "href": "/api/health"
+      }
+    }
+  ],
+  "stories": [
+    {
+      "id": "S01",
+      "title": "An in-scope secret is released",
+      "say": "The agent presents its key and asks for projects/demo/secrets/google-agent-credential. Policy: the secret is on the key's grant. Custodian: releases version 3 into the session. The payload is MOCK-issued and labelled."
+    },
+    {
+      "id": "S02",
+      "title": "An out-of-scope secret is refused — the refusal is the product",
+      "say": "The same key asks for the billing secret. Policy: not on the grant list. Gateway Policy Denied, custodian never reached, and the refusal is recorded with the agent's identity."
+    },
+    {
+      "id": "S03",
+      "title": "An unknown secret is refused too",
+      "say": "A secret that does not exist in the mock store is refused as \"no such secret\" — and the refusal shape is the same as the out-of-scope one: the agent learns nothing about what does exist."
+    },
+    {
+      "id": "S04",
+      "title": "A wrong key gets nothing at all",
+      "say": "Present a key that is not the registered agent key and the gateway refuses at the identity step: 401, policy not reached, no information about the policy beyond the fact of the refusal."
+    },
+    {
+      "id": "S05",
+      "title": "Why this beats a static key",
+      "say": "Three lines: no secret in the agent (nothing to steal from the agent host), policy per secret (the same key cannot read everything it can name), and an audit trail keyed to the agent rather than to a shared credential."
+    }
+  ]
+}

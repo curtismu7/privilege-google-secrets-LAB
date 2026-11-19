@@ -1,0 +1,27 @@
+{
+  "demos": [
+    {
+      "id": "privilege-google-secrets",
+      "name": "Privilege Google Secrets Lab",
+      "kind": "Demo",
+      "description": "Privilege Hubs brokering a Google Secret Manager credential to an AI agent: the agent holds only a Privilege agent access key, the Hubs gateway's policy allows the in-scope secret (custodian release) and refuses the out-of-scope ask — the refusal is the product. Mock gateway, mock custodian, mock Google Secret Manager; mock-issued secret labelled.",
+      "url": "http://localhost:7826",
+      "healthPath": "/api/health",
+      "composeFile": "privilege-google-secrets/docker-compose.yml",
+      "composeOverlays": [],
+      "pingProducts": [],
+      "notes": "Host-run: ./scripts/run.sh (port 7826). Mock needs no tenant and no credentials. Docker: HOST_PORT=7826 docker compose up --build -d (published on 127.0.0.1 only). No live mode: the lab contacts no gateway and no Google API in any mode; PGS_MODE_REAL=1 only enables the rule-19 Real switch. Real mode against the owner's existing gateway is owner-configured via .env, not shipped.",
+      "repo": "https://github.com/curtismu7/privilege-google-secrets-LAB",
+      "catalogId": null,
+      "alsoCatalogIds": [],
+      "tags": [
+        "pingone-privilege",
+        "ai-agent-security",
+        "agent-identity",
+        "secrets",
+        "simulated"
+      ],
+      "where": "installed"
+    }
+  ]
+}
