@@ -46,6 +46,14 @@ export default function App() {
   }, []);
   useEffect(() => { loadAll(); }, [loadAll]);
 
+  // Presenter mode exits on Escape (the key hint says so).
+  useEffect(() => {
+    if (!present) return undefined;
+    const onKey = (e) => { if (e.key === "Escape") setPresent(false); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [present]);
+
   const reset = async () => {
     await fetch("/api/reset", { method: "POST", headers: { "content-type": "application/json" }, body: "{}" });
     setResetSignal((n) => n + 1);
