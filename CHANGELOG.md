@@ -9,4 +9,4 @@
 - "Why this beats a static key" tab: no secret in the agent, policy per secret, audit trail — plus the static-key counterfactual.
 - Five doctor-checked scenarios; the diagram is diagram-studio/1 data (rule 17) with Simulate, Reset and speed control.
 - No live mode by design: the lab contacts no gateway and no Google API in any mode; `PGS_MODE_REAL=1` only enables the rule-19 Real switch, and the page keeps its simulation banner.
-- Port 7826 (one port, from the shelf allocator, 2026-11-19). Catalog id to be assigned by the owner.
+- Port 7827 (one port, from the shelf allocator, 2026-11-19). Catalog id to be assigned by the owner.

@@ -3,7 +3,7 @@
 //  2. Host header must be a loopback name (DNS-rebinding defence).
 //  3. A write must be same-origin: a cross-origin Origin, or a cross-site Sec-Fetch-Site, is refused.
 //  4. Every host in any shipped text is reserved (.invalid / .example / apex of example.com|net|org).
-//  5. The one port is 7826 (allocated 2026-11-18) and never one of the forbidden ones.
+//  5. The one port is 7827 (allocated 2026-11-18) and never one of the forbidden ones.
 //  6. Every key-looking string is an obviously fake sk-MOCK- value.
 
 export function isLoopbackHost(host) {
@@ -18,9 +18,9 @@ export function assertBindAllowed(host, env = process.env) {
   throw new Error(`refusing to bind ${host}: loopback only. Set PGS_BIND to opt in.`);
 }
 
-export const PORT_MIN = 7826;
-export const PORT_MAX = 7826;
-export const DEFAULT_PORT = 7826;
+export const PORT_MIN = 7827;
+export const PORT_MAX = 7827;
+export const DEFAULT_PORT = 7827;
 const FORBIDDEN_PORTS = new Set([8080, 5173, 3900, 4000, 4400, 4510, 4600, 4601, 4840, 18080, 19080, 19090]);
 export function portProblem(port) {
   if (!Number.isInteger(port)) return 'PORT is not an integer';

@@ -18,7 +18,7 @@ test('the shelf entry is valid and portable: relative composeFile, loopback url,
   assert.equal(e.id, 'privilege-google-secrets');
   assert.equal(e.kind, 'Demo');
   assert.equal(e.healthPath, '/api/health');
-  assert.match(e.url, /^http:\/\/localhost:7826$/);
+  assert.match(e.url, /^http:\/\/localhost:7827$/);
   assert.ok(!path.isAbsolute(e.composeFile), 'composeFile must be relative or a placeholder');
   assert.ok(!/\/Users\//.test(JSON.stringify(e)), 'no absolute home path');
 });

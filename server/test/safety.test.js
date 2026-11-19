@@ -14,19 +14,19 @@ test('bind: loopback only unless PGS_BIND is set', () => {
   assert.equal(assertBindAllowed('0.0.0.0', { PGS_BIND: '0.0.0.0' }), '0.0.0.0');
 });
 
-test('ports: 7826 only, never a reserved or another agent\'s one', () => {
-  assert.equal(portProblem(7826), null);
+test('ports: 7827 only, never a reserved or another agent\'s one', () => {
+  assert.equal(portProblem(7827), null);
   for (const p of [5000, 7720, 7799, 7801, 7710, 7700, 5200, 8080, 5173, 3900, 4000, 4400, 4510, 4600, 4601, 4840, 18080, 19080, 19090, 4771, 4700]) assert.ok(portProblem(p), String(p));
   assert.ok(portProblem(NaN));
-  assert.equal(resolvePort({}), 7826);
-  assert.equal(resolvePort({ PORT: '7826' }), 7826);
+  assert.equal(resolvePort({}), 7827);
+  assert.equal(resolvePort({ PORT: '7827' }), 7827);
   assert.throws(() => resolvePort({ PORT: '7720' })); // meridian-a2a-hop owns 7720
   assert.throws(() => resolvePort({ PORT: '7801' }));
 });
 
 test('reserved hosts and the host scan', () => {
   assert.ok(isReservedHost('a.b.invalid')); assert.ok(isReservedHost('mcp.northwind.example')); assert.ok(!isReservedHost('example.com'), 'the rulebook allows only .example and .invalid'); assert.ok(!isReservedHost('example.org')); assert.ok(!isReservedHost('sub.example.com'));
-  assert.deepEqual(scanHosts('https://as.example.invalid/x and mail a@agent.example and http://localhost:7826/'), []);
+  assert.deepEqual(scanHosts('https://as.example.invalid/x and mail a@agent.example and http://localhost:7827/'), []);
   assert.deepEqual(scanHosts('authz warm (http://authz.example:9001)'), [], 'a URL in parentheses keeps its host clean');
   assert.deepEqual(scanHosts('authz warm (http://real-host.test:9001)'), ['real-host.test'], 'and a real host in parentheses is still caught');
   assert.deepEqual(scanHosts('https://example.com/mcp'), ['example.com']);
@@ -48,17 +48,17 @@ test('cleanText strips control and bidi characters and caps the length', () => {
 const run = (mw, req) => { const out = {}; const res = { status(c) { out.status = c; return this; }, json(b) { out.body = b; return this; } }; mw(req, res, () => { out.next = true; }); return out; };
 
 test('hostCheck refuses a non-loopback Host (DNS rebinding)', () => {
-  assert.ok(run(hostCheck, { headers: { host: 'localhost:7826' } }).next);
-  assert.ok(run(hostCheck, { headers: { host: '[::1]:7826' } }).next);
-  assert.equal(run(hostCheck, { headers: { host: 'evil.example.invalid:7826' } }).status, 403);
+  assert.ok(run(hostCheck, { headers: { host: 'localhost:7827' } }).next);
+  assert.ok(run(hostCheck, { headers: { host: '[::1]:7827' } }).next);
+  assert.equal(run(hostCheck, { headers: { host: 'evil.example.invalid:7827' } }).status, 403);
   assert.equal(run(hostCheck, { headers: {} }).status, 403);
 });
 
 test('sameOriginWrites: GET passes, cross-origin and cross-site writes refused', () => {
-  const h = { host: 'localhost:7826' };
+  const h = { host: 'localhost:7827' };
   assert.ok(run(sameOriginWrites, { method: 'GET', headers: { ...h, origin: 'http://evil.example.invalid' } }).next);
   assert.ok(run(sameOriginWrites, { method: 'POST', headers: h }).next, 'no Origin (curl) is allowed');
-  assert.ok(run(sameOriginWrites, { method: 'POST', headers: { ...h, origin: 'http://localhost:7826' } }).next);
+  assert.ok(run(sameOriginWrites, { method: 'POST', headers: { ...h, origin: 'http://localhost:7827' } }).next);
   assert.equal(run(sameOriginWrites, { method: 'POST', headers: { ...h, origin: 'http://localhost:9999' } }).status, 403);
   assert.equal(run(sameOriginWrites, { method: 'POST', headers: { ...h, origin: 'null' } }).status, 403);
   assert.equal(run(sameOriginWrites, { method: 'DELETE', headers: { ...h, 'sec-fetch-site': 'cross-site' } }).status, 403);
@@ -67,10 +67,10 @@ test('sameOriginWrites: GET passes, cross-origin and cross-site writes refused',
 });
 
 test('a public origin is never same-origin: there is no hosted build, so only the request Host (or the proxy\'s X-Forwarded-Host) counts', () => {
-  const post = (origin, extra = {}) => run(sameOriginWrites, { method: 'POST', headers: { host: '127.0.0.1:7826', origin, ...extra } });
+  const post = (origin, extra = {}) => run(sameOriginWrites, { method: 'POST', headers: { host: '127.0.0.1:7827', origin, ...extra } });
   assert.equal(post('https://app.demo.example').status, 403);
   assert.equal(post('not a url').status, 403);
-  assert.ok(post('http://127.0.0.1:7826').next);
+  assert.ok(post('http://127.0.0.1:7827').next);
   assert.ok(post('https://local.ping-devops.com:8443', { 'x-forwarded-host': 'local.ping-devops.com:8443' }).next, 'behind the shared lab-proxy');
 });
 

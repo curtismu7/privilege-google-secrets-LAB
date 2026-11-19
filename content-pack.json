@@ -7,7 +7,7 @@
     "id": "privilege-google-secrets",
     "name": "Privilege Google Secrets Lab",
     "catalog": "D0",
-    "baseUrl": "http://localhost:7826",
+    "baseUrl": "http://localhost:7827",
     "doctor": "/api/health",
     "tags": [
       "pingone-privilege",

@@ -23,8 +23,8 @@ Catalog id: to be assigned by the owner.
 
 ## Run it
 
-- Host: `./scripts/run.sh` (Node 26+), then open http://localhost:7826/.
-- Docker (OrbStack): `HOST_PORT=7826 docker compose up --build -d`, published on `127.0.0.1` only.
+- Host: `./scripts/run.sh` (Node 26+), then open http://localhost:7827/.
+- Docker (OrbStack): `HOST_PORT=7827 docker compose up --build -d`, published on `127.0.0.1` only.
 - Through the shared lab-proxy: `https://local.ping-devops.com:8443/privilege-google-secrets/` once the route is registered.
 - Tests: `npm ci && npm test` (server, web and packaging). Preflight: `npm run doctor`. Reset: `npm run reset`.
 - **No live mode.** This lab contacts no gateway and no Google API in any mode (the netguard refuses every non-loopback socket). `PGS_MODE_REAL=1` in the lab's own `.env` only enables the rule-19 Real switch, and the page keeps its simulation banner. Real mode against the owner's existing Privilege gateway is owner-configured via `.env`, not shipped. `MODE` in `.env` forces the start mode; the header toggle (`POST /api/mode`, exactly `{source:"mock"|"real"}`, 409 with the reason) switches at runtime.
@@ -42,21 +42,21 @@ npm run doctor
 npm start
 ```
 
-Open http://127.0.0.1:7826/. `GET /api/health` answers `demo-health/1`.
+Open http://127.0.0.1:7827/. `GET /api/health` answers `demo-health/1`.
 
 ## What to do if the port is taken
 
 ```
-Ports: privilege-google-secrets listens on 7826 only.
-Docker publishes it on 127.0.0.1:7826 only.
+Ports: privilege-google-secrets listens on 7827 only.
+Docker publishes it on 127.0.0.1:7827 only.
 
 If the port is taken:
 1. Find what is using it:
-   lsof -iTCP:7826 -sTCP:LISTEN -n -P
+   lsof -iTCP:7827 -sTCP:LISTEN -n -P
 2. If it is an old copy of this lab (npm start), stop that process: kill <PID>.
    If it is this lab's container: docker compose down (from this folder).
 3. If it is something else, stop it. The lab refuses any other port on purpose
-   (one port per app; npm run doctor says so), so free 7826 rather than moving the lab.
+   (one port per app; npm run doctor says so), so free 7827 rather than moving the lab.
 4. Then start again: npm start, or docker compose up -d.
 ```
 

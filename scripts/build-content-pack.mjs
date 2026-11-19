@@ -21,7 +21,7 @@ export function buildPack() {
     id: 'privilege-google-secrets',
     title: 'Privilege Google Secrets Lab',
     version,
-    demo: { id: 'privilege-google-secrets', name: 'Privilege Google Secrets Lab', catalog: 'D0', baseUrl: 'http://localhost:7826', doctor: '/api/health', tags: ['pingone-privilege', 'ai-agent-security', 'agent-identity', 'secrets', 'mock-only'] },
+    demo: { id: 'privilege-google-secrets', name: 'Privilege Google Secrets Lab', catalog: 'D0', baseUrl: 'http://localhost:7827', doctor: '/api/health', tags: ['pingone-privilege', 'ai-agent-security', 'agent-identity', 'secrets', 'mock-only'] },
     glossary: [
       { id: 'agent-key', term: 'Agent access key', definition: 'The one credential an AI agent holds in the Privilege model: it identifies the agent to the Hubs gateway and carries its per-secret grant. It is not a Google credential and opens nothing by itself.', aliases: ['agent access key'] },
       { id: 'secret-policy', term: 'Secret policy', definition: 'The Hubs gateway policy that decides, per secret, whether the presenting agent\'s key may read it. An out-of-scope ask is refused with Gateway Policy Denied — the refusal is the product.', aliases: ['policy'] },

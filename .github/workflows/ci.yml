@@ -20,7 +20,7 @@ jobs:
       - run: bash scripts/check-ui-standard.sh
       - run: npm test
       - run: npm run build
-      - run: PORT=7826 npm run doctor
+      - run: PORT=7827 npm run doctor
       - name: Conformance (rulebook gate, --new)
         # A copy of demo-kit-base's gate; it sits under server/test/ because the gate scans every other source file, itself included.
         run: node server/test/demo-kit-conformance.mjs . --new --tier=Demo
