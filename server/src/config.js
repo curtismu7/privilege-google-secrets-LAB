@@ -5,7 +5,7 @@
 export function realAvailableFrom(env = process.env) { return env.PGS_MODE_REAL === '1'; }
 
 export function realProblemFrom(env = process.env) {
-  return 'Set PGS_MODE_REAL=1 (owner\'s .env) to see the real measured tenant state: hub GCP-hub-secrets, project privilege-hub-test-643070, 2 secrets, the YukonRiver grant — console-API export 2026-11-17. The MCP broker flow stays a simulation in both modes (no live gateway is contacted).';
+  return 'Set PGS_MODE_REAL=1 (owner\'s .env) to see the real measured tenant state: hub GCP-hub-secrets, project privilege-hub-test-643070, 12 secrets (10 added 2026-11-19), the YukonRiver grant — console-API export 2026-11-19. The MCP broker flow stays a simulation in both modes (no live gateway is contacted).';
 }
 
 // The launch mode. Default: Real if enabled, else Mock. The runtime mode (POST /api/mode) starts from this.

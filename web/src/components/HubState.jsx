@@ -27,7 +27,7 @@ export default function HubState({ source }) {
 
   return (
     <section className="pgs-section" data-testid="hub-state" aria-labelledby="pgs-h-hub">
-      <h2 id="pgs-h-hub">0 · The real tenant state{snapshotDate ? ` — console export ${snapshotDate}` : ""}</h2>
+      <h2 id="pgs-h-hub"><span className="step-num" aria-hidden="true">0</span>The real tenant state{snapshotDate ? ` — console export ${snapshotDate}` : ""}</h2>
       <p className="pgs-section-lead">
         This section is <strong>measured, not simulated</strong>: the owner's actual Privilege Secrets Hub, exported through the
         console API{snapshotDate ? ` on ${snapshotDate}` : ""}. No credentials are shown. The MCP broker cards below stay a

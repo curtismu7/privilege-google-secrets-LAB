@@ -7,7 +7,7 @@ const SNAPSHOT = {
   hub: {
     name: "GCP-hub-secrets", provider: "GCP", displayName: "Privilege Hub Test",
     projectId: "privilege-hub-test-643070", accountType: "project", createdAt: "2026-10-04",
-    lastSync: "2026-11-17 05:23 UTC", roles: ["roles/secretmanager.admin", "roles/secretmanager.viewer"],
+    lastSync: "2026-11-19 (12 secrets after the 2026-11-19 add; prior syncs 2026-11-17, 2026-10-13)", roles: ["roles/secretmanager.admin", "roles/secretmanager.viewer"],
   },
   secrets: [
     { id: "groq-key", path: "projects/839155367094/secrets/groq-key", provider: "GCP" },
@@ -46,7 +46,7 @@ describe("HubState", () => {
     const kv = within(screen.getByTestId("hub-kv"));
     expect(kv.getByText("GCP-hub-secrets")).toBeInTheDocument();
     expect(kv.getByText("privilege-hub-test-643070")).toBeInTheDocument();
-    expect(kv.getByText("2026-11-17 05:23 UTC")).toBeInTheDocument();
+    expect(kv.getByText("2026-11-19 (12 secrets after the 2026-11-19 add; prior syncs 2026-11-17, 2026-10-13)")).toBeInTheDocument();
     expect(kv.getByText("roles/secretmanager.admin")).toBeInTheDocument();
 
     const table = within(screen.getByTestId("secrets-table"));

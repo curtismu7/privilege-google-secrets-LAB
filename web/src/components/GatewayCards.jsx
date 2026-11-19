@@ -65,7 +65,7 @@ export default function GatewayCards({ resetSignal }) {
   return (
     <div data-testid="gateway-cards">
       <section className="pgs-section" aria-labelledby="pgs-h-cast">
-        <h2 id="pgs-h-cast">1 · Who is in the story</h2>
+        <h2 id="pgs-h-cast"><span className="step-num" aria-hidden="true">1</span>Who is in the story</h2>
         <p className="pgs-section-lead">
           Three actors. The <strong>agent</strong> is an AI program that needs a Google credential to do its job.
           <strong> Privilege Hubs</strong> is the broker in the middle: it knows which agents exist and what each one is allowed to have.
@@ -86,31 +86,33 @@ export default function GatewayCards({ resetSignal }) {
       </section>
 
       <section className="pgs-section" aria-labelledby="pgs-h-try">
-        <h2 id="pgs-h-try">2 · Try it — same agent, two secrets, one policy</h2>
+        <h2 id="pgs-h-try"><span className="step-num" aria-hidden="true">2</span>Try it — same agent, two secrets, one policy</h2>
         <p className="pgs-section-lead">
           Each button sends a real MCP <code>tools/call</code> to the Hubs gateway. Watch the trace at the bottom:
           the gateway checks the agent key, then the secret policy, then releases or refuses.
           Card 1 is on the agent's grant — policy passes and the custodian releases the secret.
           Card 2 is not on the grant — the gateway refuses it, and that refusal is the point.
         </p>
-        <div className="card">
-          <h3>Card 1 — get_google_secret (in scope)</h3>
-          <p className="small muted">MCP tools/call against <code>{catalog.gatewayUrl}</code>. The default secret is on the agent key's grant: policy passes, the custodian releases it.</p>
-          <label>Secret name
-            <input value={secret} onChange={(e) => setSecret(e.target.value)} data-testid="secret-input" maxLength={120} list="known-secrets" />
-          </label>
-          <datalist id="known-secrets">{catalog.knownSecrets.map((s) => <option key={s} value={s} />)}</datalist>
-          <p className="actions">
-            <button type="button" disabled={busy} data-testid="call-in-scope" onClick={() => call("/api/gateway/get-google-secret", { secret, key }, "Gateway check: tools/call get_google_secret")}>Call gateway</button>
-          </p>
-        </div>
+        <div className="duo">
+          <div className="card">
+            <h3>Card 1 — get_google_secret (in scope)</h3>
+            <p className="small muted">MCP tools/call against <code>{catalog.gatewayUrl}</code>. The default secret is on the agent key's grant: policy passes, the custodian releases it.</p>
+            <label>Secret name
+              <input value={secret} onChange={(e) => setSecret(e.target.value)} data-testid="secret-input" maxLength={120} list="known-secrets" />
+            </label>
+            <datalist id="known-secrets">{catalog.knownSecrets.map((s) => <option key={s} value={s} />)}</datalist>
+            <p className="actions">
+              <button type="button" disabled={busy} data-testid="call-in-scope" onClick={() => call("/api/gateway/get-google-secret", { secret, key }, "Gateway check: tools/call get_google_secret")}>Call gateway</button>
+            </p>
+          </div>
 
-        <div className="card">
-          <h3>Card 2 — get_google_billing_secret (out of scope)</h3>
-          <p className="small muted">The same key asks for the billing secret. Policy refuses: <strong>the refusal is the product</strong>. Read the policy reason in the trace.</p>
-          <p className="actions">
-            <button type="button" disabled={busy} data-testid="call-out-of-scope" onClick={() => call("/api/gateway/get-billing-secret", { key }, "Gateway check: tools/call get_google_billing_secret (refused)")}>Call gateway (expect DENY)</button>
-          </p>
+          <div className="card">
+            <h3>Card 2 — get_google_billing_secret (out of scope)</h3>
+            <p className="small muted">The same key asks for the billing secret. Policy refuses: <strong>the refusal is the product</strong>. Read the policy reason in the trace.</p>
+            <p className="actions">
+              <button type="button" disabled={busy} data-testid="call-out-of-scope" onClick={() => call("/api/gateway/get-billing-secret", { key }, "Gateway check: tools/call get_google_billing_secret (refused)")}>Call gateway (expect DENY)</button>
+            </p>
+          </div>
         </div>
 
         <div className="card">
@@ -124,7 +126,7 @@ export default function GatewayCards({ resetSignal }) {
 
       {released && (
         <section className="pgs-section" aria-labelledby="pgs-h-released">
-          <h2 id="pgs-h-released">3 · What the agent received</h2>
+          <h2 id="pgs-h-released"><span className="step-num" aria-hidden="true">3</span>What the agent received</h2>
           <p className="pgs-section-lead">
             The custodian released this into the agent session after the policy passed.
             It is <strong>MOCK-issued and labelled</strong> — shown so the flow is legible, never a real credential.
