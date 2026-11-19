@@ -18,6 +18,6 @@ test('realAvailable reflects only the opt-in; the hint names the real tenant con
   assert.match(realProblemFrom({}), /PGS_MODE_REAL/);
   assert.match(realProblemFrom({}), /GCP-hub-secrets/);
   assert.match(realProblemFrom({}), /privilege-hub-test-643070/);
-  assert.match(realProblemFrom({}), /2026-11-17/);
+  assert.match(realProblemFrom({}), /2026-11-19/);
   assert.match(realProblemFrom({}), /simulation in both modes/);
 });

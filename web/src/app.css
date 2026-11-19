@@ -54,8 +54,12 @@ label.inline { display: inline-flex; margin-top: 0; font-weight: 400; }
 label.pfilter { gap: 8px; align-items: center; margin-right: 12px; font-weight: 600; }
 /* The product select is as wide as its longest name: at 375px it wraps below its label and shrinks instead of widening the page. */
 label.pfilter { flex-wrap: wrap; max-width: 100%; } label.pfilter select { min-width: 0; max-width: 100%; }
-.gate, .posture { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); align-items: start; }
+.gate, .posture { display: grid; gap: 12px; grid-template-columns: 1fr; align-items: start; }
 .posture > .panel--warn { grid-column: 1 / -1; }
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 900px) { .duo { grid-template-columns: 1fr; } }
+.step-num { display: inline-grid; place-items: center; min-width: 1.4rem; height: 1.4rem; border-radius: 999px;
+  background: var(--accent-gradient); color: var(--on-accent); font: 700 0.75rem var(--font-mono); margin-right: 0.5em; vertical-align: 2px; }
 .panel { border: 1px solid var(--th-border); background: var(--th-bg-card); border-radius: var(--radius-lg); padding: 12px 14px; min-width: 0; }
 .panel h2 { margin: 0 0 8px; font-size: var(--font-size-lg); }
 .panel h3 { margin: 12px 0 4px; font-size: var(--font-size-base); }
@@ -92,7 +96,7 @@ details { margin: 6px 0; } summary { cursor: pointer; font-size: var(--font-size
 .app--presenter .json, .app--presenter .tbl { font-size: var(--font-size-base); }
 /* Privilege Google Secrets Lab additions */
 .logs { display: grid; gap: 12px; }
-.cards { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); align-items: start; margin: 8px 0; }
+.cards { display: grid; gap: 12px; grid-template-columns: 1fr; align-items: start; margin: 8px 0; }
 .qform { display: flex; gap: 8px; flex-wrap: wrap; margin: 4px 0 8px; }
 .qform .field { display: flex; flex-direction: column; gap: 2px; margin: 0; flex: 1 1 15rem; min-width: 0; }
 .pe-builder { grid-column: 1 / -1; }
