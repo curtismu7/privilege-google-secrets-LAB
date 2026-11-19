@@ -124,7 +124,7 @@ pre,
   border-radius: 8px;
   background: var(--surface-2);
   color: var(--text);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
 }
 
 /* Live mode: the banner edge changes colour so a live page never looks simulated. */
@@ -241,7 +241,7 @@ button[aria-pressed="true"] {
   border-radius: 4px;
   background: var(--surface);
   color: var(--text);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -249,7 +249,7 @@ button[aria-pressed="true"] {
   border-left-width: var(--dg-stripe);
 }
 .dg-node strong { font-weight: 700; }
-.dg-node span { font-size: 0.875rem; overflow-wrap: anywhere; color: var(--text-body); }
+.dg-node span { font-size: 0.75rem; overflow-wrap: anywhere; color: var(--text-body); }
 .dg-node.hot { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 .dg-dark  { border-left-color: var(--dg-dark); }
 .dg-blue  { border-left-color: var(--dg-blue); }
@@ -292,7 +292,7 @@ button[aria-pressed="true"] {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--text);
 }
@@ -387,7 +387,7 @@ button[aria-pressed="true"] {
 
 .story__eyebrow {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   color: var(--danger-text);
@@ -452,7 +452,7 @@ button[aria-pressed="true"] {
   border-radius: 999px;
   background: var(--accent);
   color: var(--on-accent);
-  font-size: 0.875rem;
+  font-size: 0.75rem;
 }
 
 .story__step[aria-pressed="true"] .story__n {
@@ -466,7 +466,7 @@ button[aria-pressed="true"] {
   border-radius: 999px;
   border: 1px solid var(--status-warn);
   color: var(--status-warn);
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   font-weight: 700;
 }
 

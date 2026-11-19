@@ -146,3 +146,13 @@ button[aria-pressed="true"]:hover:not(:disabled) { background: var(--accent-deep
   font-size: var(--font-size-sm);
   line-height: 1.5;
 }
+
+/* 12pt floor (16px): this lab lifts the small sizes the shared stylesheet sets in rem, so
+   nothing renders below 12pt at the default root. Lab-local override; the shared
+   standalone-ui.css stays byte-identical to the canonical copy. */
+.small, .muted, .dg-node span, .gw-num,
+.gw-evidence, .gw-tag, .gw-chip, .gw-setup, .gw-record,
+.facts .tag, .chip, .pill, .story__eyebrow,
+.top-menu__ctl, .top-menu__ctl select, .top-menu__ctl button,
+.top-menu__theme, .top-menu__theme select, .top-menu button, .top-menu select,
+.banner { font-size: 1rem; }
