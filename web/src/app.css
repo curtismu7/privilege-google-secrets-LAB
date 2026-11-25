@@ -160,3 +160,4 @@ button[aria-pressed="true"]:hover:not(:disabled) { background: var(--accent-deep
 .top-menu__ctl, .top-menu__ctl select, .top-menu__ctl button,
 .top-menu__theme, .top-menu__theme select, .top-menu button, .top-menu select,
 .banner { font-size: 1rem; }
+.card p, .card code, .card label { overflow-wrap: anywhere; }
