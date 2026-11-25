@@ -161,8 +161,10 @@ button[aria-pressed="true"]:hover:not(:disabled) { background: var(--accent-deep
 .top-menu__theme, .top-menu__theme select, .top-menu button, .top-menu select,
 .banner { font-size: 1rem; }
 
+
 /* Phone: a long-maxLength text input's intrinsic width pushed the page to 427px
    on a 390px phone; cap inputs to their container. */
 @media (max-width: 600px) {
   input[type="text"] { max-width: 100%; box-sizing: border-box; }
 }
+.card p, .card code, .card label { overflow-wrap: anywhere; }
